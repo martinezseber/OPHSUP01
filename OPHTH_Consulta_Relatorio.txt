@@ -1,0 +1,37 @@
+SELECT h.[E3TimeStamp] as Inicio
+      ,h.[cmpProduto]
+      ,h.[cmpLote]
+      ,h.[cmpDtFab]
+      ,h.[cmpDtValid]
+      ,h.[cmpQtdPrev]
+      ,h.[cmpOperador]
+      ,h.[cmpSupervisor]
+	  ,t.AprovBula
+	  ,t.AprovCartucho
+	  ,t.AprovPesagem
+	  ,t.AprovVisao
+	  ,t.RejBula
+	  ,t.RejCartucho
+	  ,t.RejPesagem
+          ,t.RejVisao
+	  ,t.RejVisu1
+	  ,t.RejVisu2
+	  ,t.RejVisu3
+  FROM [tab_Hist_Lotes2] h
+	LEFT JOIN 
+  (SELECT [cmpLote] as Lote
+      ,SUM([cmpAprov1]) As AprovBula
+      ,SUM([cmpAprov2]) As AprovCartucho
+      ,SUM([cmpAprov3]) As AprovPesagem
+      ,SUM([cmpAprov4]) As AprovVisao
+      ,SUM([cmpReprov1]) As RejBula
+      ,SUM([cmpReprov2]) As RejCartucho
+      ,SUM([cmpReprov3]) As RejPesagem
+      ,SUM([cmpReprov4]) As RejVisao
+      ,SUM([cmpReprov5]) As RejVisu1
+      ,SUM([cmpReprov6]) As RejVisu2
+      ,SUM([cmpReprov7]) As RejVisu3
+      ,MAX([cmpEstado]) As Segmentos
+  FROM [tab_Totais2] Group by cmpLote) As t
+  ON h.cmpLote = t.Lote
+Where h.cmpLote='<%dLote%>'
